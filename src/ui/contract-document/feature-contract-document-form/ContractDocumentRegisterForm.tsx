@@ -17,7 +17,8 @@ type ContractDocumentRegisterFormProps = {
 
 const ContractDocumentRegisterForm = ({ onClose, onSubmit }: ContractDocumentRegisterFormProps) => {
   const methods = useForm<ContractDocumentRegisterFormInput>({ defaultValues: { contractDocuments: [] } })
-  const { handleSubmit } = methods
+  const { handleSubmit, watch } = methods
+  const selectedContractId = watch('id')
 
   const { data: draftsData = [] } = useDrafts()
 
@@ -28,7 +29,7 @@ const ContractDocumentRegisterForm = ({ onClose, onSubmit }: ContractDocumentReg
           <div className={cx('input')}>
             <FieldLabel label='거래 선택' required />
             <DropdownConncet
-              name='id'
+              name='contractId'
               filters={draftsData.map(({ id, data }) => ({ text: data, data: id }))}
               label='거래 선택'
               rules={{
@@ -40,7 +41,7 @@ const ContractDocumentRegisterForm = ({ onClose, onSubmit }: ContractDocumentReg
           </div>
           <div className={cx('input')}>
             <FieldLabel label='계약서 목록' required />
-            <ContractDocumentRegisterConnect />
+            <ContractDocumentRegisterConnect contractId={selectedContractId} />
           </div>
         </div>
         <div className={cx('buttonContainer')}>

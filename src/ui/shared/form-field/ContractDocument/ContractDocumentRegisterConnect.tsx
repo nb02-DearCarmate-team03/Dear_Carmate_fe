@@ -13,11 +13,13 @@ import { AxiosError } from 'axios'
 const cx = classNames.bind(styles)
 
 type ContractDocumentRegisterConnectProps = {
+  contractId: number
 }
 
 const ContractDocumentRegisterConnect = ({ }: ContractDocumentRegisterConnectProps) => {
-  const { setValue, watch } = useFormContext<ContractDocumentRegisterFormInput>()
+  const { setValue, watch, control } = useFormContext<ContractDocumentRegisterFormInput>()
   const contractDocuments = watch('contractDocuments')
+  const contractId = watch('contractId')
   const [isLoading, setIsLoading] = useState(false)
   const [previewFiles, setPreviewFiles] = useState<DocumentType[]>([])
 
@@ -26,9 +28,13 @@ const ContractDocumentRegisterConnect = ({ }: ContractDocumentRegisterConnectPro
   const handleUploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
+    if (!contractId || typeof contractId !== 'number') {
+      alert('파일을 업로드할 계약서가 선택되지 않았습니다.')
+      return
+    }
     try {
       setIsLoading(true)
-      const id = await uploadFile(file)
+      const id = await uploadFile(file, contractId)
       setValue('contractDocuments', [...contractDocuments, { id, fileName: file.name }])
       setPreviewFiles([...previewFiles, { id, fileName: file.name }])
     } catch (error) {
@@ -46,6 +52,12 @@ const ContractDocumentRegisterConnect = ({ }: ContractDocumentRegisterConnectPro
 
   return (
     <div>
+      <Controller
+        name='contractId'
+        control={control}
+        defaultValue={contractId}
+        render={({ field }) => <input type='hidden' {...field} />}
+      />
       <Controller
         name='contractDocuments'
         rules={{

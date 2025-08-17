@@ -13,9 +13,10 @@ const cx = classNames.bind(styles)
 
 type ContractDocumentEditFieldProps = {
   initialDocuments: DocumentType[]
+  contractId: number
 }
 
-const ContractDocumentEditField = ({ initialDocuments }: ContractDocumentEditFieldProps) => {
+const ContractDocumentEditField = ({ initialDocuments, contractId }: ContractDocumentEditFieldProps) => {
   const { setValue, watch } = useFormContext<ContractDocumentEditFormInput>()
   const contractDocuments = watch('contractDocuments')
 
@@ -28,9 +29,13 @@ const ContractDocumentEditField = ({ initialDocuments }: ContractDocumentEditFie
   const handleUploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
+    if (!contractId || typeof contractId !== 'number') {
+      alert('유효한 계약 ID가 없습니다. 페이지를 새로고침하거나 관리자에게 문의해주세요.')
+      return
+    }
     try {
       setIsLoading(true)
-      const id = await uploadFile(file)
+      const id = await uploadFile(file, contractId)
       setValue('contractDocuments', [...contractDocuments, { id, fileName: file.name }])
       setPreviewFiles([...previewFiles, { id, fileName: file.name }])
     } catch (error) {

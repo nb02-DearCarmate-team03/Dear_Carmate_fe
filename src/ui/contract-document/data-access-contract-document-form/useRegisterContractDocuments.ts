@@ -18,8 +18,16 @@ const useRegisterContractDocuments = () => {
     ContractDocumentRegisterFormInput,
     unknown
   >({
-    mutationFn: async ({ id, ...data }) =>
-      await editContract(id, data),
+    mutationFn: async (inputData) => {
+
+      const { contractId, ...dataToUpdate } = inputData
+
+      if (!contractId || typeof contractId !== 'number') {
+        throw new Error('유효한 계약 ID가 없습니다.')
+      }
+
+      return await editContract(contractId, dataToUpdate)
+    },
     onSuccess: () => {
       openConfirmModal({
         text: '계약서 추가에 성공했습니다.',

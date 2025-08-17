@@ -232,6 +232,7 @@ export type ContractDocumentType = {
 export type ContractDocumentRegisterFormInput = {
   id: number,
   contractDocuments: DocumentType[],
+  contractId: number
 }
 
 export type ContractDocumentEditFormInput = {

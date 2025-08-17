@@ -369,9 +369,10 @@ export const getDashboardData = async () => {
 }
 
 // File upload related APIs
-export const uploadFile = async (file: File): Promise<{ id: number }> => {
+export const uploadFile = async (file: File, contractId: number): Promise<{ id: number }> => {
   const formData = new FormData()
   formData.append('file', file)
+  formData.append('contractId', contractId.toString())
   const response = await axios.postForm<{ id: number }>(
     '/contractDocuments/upload',
     formData,
