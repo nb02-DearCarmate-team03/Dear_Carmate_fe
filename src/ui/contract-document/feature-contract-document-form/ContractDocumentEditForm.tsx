@@ -10,11 +10,12 @@ const cx = classNames.bind(styles)
 
 type ContractDocumentEditFormProps = {
   initialDocuments: DocumentType[]
+  contractId: number
   onClose: () => void
   onSubmit: (data: ContractDocumentEditFormInput) => void
 }
 
-const ContractDocumentEditForm = ({ initialDocuments, onClose, onSubmit }: ContractDocumentEditFormProps) => {
+const ContractDocumentEditForm = ({ initialDocuments, contractId, onClose, onSubmit }: ContractDocumentEditFormProps) => {
   const methods = useForm<ContractDocumentEditFormInput>({ defaultValues: { contractDocuments: initialDocuments } })
   const { handleSubmit } = methods
 
@@ -24,7 +25,7 @@ const ContractDocumentEditForm = ({ initialDocuments, onClose, onSubmit }: Contr
         <div className={cx('inputs')}>
           <div className={cx('input')}>
             <FieldLabel label='계약서 목록' />
-            <ContractDocumentEditField initialDocuments={initialDocuments} />
+            <ContractDocumentEditField initialDocuments={initialDocuments} contractId={contractId} />
           </div>
         </div>
         <div className={cx('buttonContainer')}>
