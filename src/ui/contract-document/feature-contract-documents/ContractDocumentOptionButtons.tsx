@@ -74,6 +74,7 @@ const ContractDocumentOptionButtons = ({
             form: (
               <ContractDocumentEditForm
                 initialDocuments={documents}
+                contractId={id}
                 onClose={closeFormModal}
                 onSubmit={handleEditContractDocument}
               />
